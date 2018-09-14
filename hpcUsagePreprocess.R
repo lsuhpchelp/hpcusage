@@ -9,6 +9,7 @@ jlog$requested <- jlog$requested/3600
 jlog$month <- month(jlog$stime)
 jlog$year <- year(jlog$stime)
 jlog$quarter <- quarter(jlog$stime, with_year=TRUE)
+jlog$week <- week(jlog$stime)
 
 # Clean up allocation data.
 
