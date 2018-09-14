@@ -23,14 +23,14 @@ alloc$user <- tolower(alloc$user)
 
 # Assign an institution to each allocation using the PI's email.
 # Note: it's kind of messy, but it's the best we can do for now. It's a problem for LONI only.
+
+alloc_w_org <- merge(alloc,ud,by="user",all.x=T)
+
 if (prefix == "hpc_") {
 
-  alloc_w_org <- alloc
   alloc_w_org$org <- "lsu"
 
 } else {
-
-  alloc_w_org <- merge(alloc,ud,by="user",all.x=T)
 
   # Clean up the PI affiliation for historical data.
   # This part is hard coded.
@@ -61,7 +61,7 @@ if (prefix == "hpc_") {
 # Other: lsmsa,other
 alloc_w_org$system <- mapvalues(alloc_w_org$org,
         from = c("lsus","lsu","lsuhsc","marybird","pbrc","subr","tulane","xula","uno","latech","ulm","ull","selu","gram","mcneese","nsula","lsmsa","other"),
-        to = c(rep("lsu",5), "su", rep("laciu",2), rep("ull",8), rep("other",2))
+        to = c(rep("lsu",5), "su", rep("laciu",2), rep("ull",8), rep("other",2)), warn_missing = TRUE
 )
 
 # Get the region for each allocation.
@@ -72,7 +72,7 @@ alloc_w_org$system <- mapvalues(alloc_w_org$org,
 
 alloc_w_org$region <- mapvalues(alloc_w_org$org,
         from = c("latech", "lsus", "ulm", "nsula", "lsuhsc", "gram", "lsmsa", "tulane", "xula", "subr", "uno", "lsu", "ull", "selu", "marybird", "mcneese", "pbrc", "other"),
-        to = c(rep("north",7),rep("south",10),"other")
+        to = c(rep("north",7),rep("south",10),"other"), warn_missing = TRUE
 )
 
 # Assgin a discipline to each allocation.
@@ -88,7 +88,7 @@ alloc_w_org[is.na(alloc_w_org$area1),]$area1 <- 1000
 alloc_w_org[alloc_w_org$area1 >= 150 & alloc_w_org$area1 < 200,]$area1 <- 700
 alloc_w_org[alloc_w_org$area1 >= 140 & alloc_w_org$area1 < 150,]$area1 <- 200
 alloc_w_org$area <- as.numeric(alloc_w_org$area1) %/% 100
-mapping = data.frame(key=c(1,2,3,4,5,6,7,10),area=c('Physics','Chemistry','Computer science and engineering','Biological sciences','Geosciences','Engineering','Material sciences','Not specified'))
+mapping = data.frame(key=c(1,2,3,4,5,6,7,8,9,10),area=c('Physics','Chemistry','Computer science and engineering','Biological sciences','Geosciences','Engineering','Material sciences',rep('Not specified',3)))
 alloc_w_org$research_area <- with(mapping,area[match(alloc_w_org$area,key)])
 
 # Trim the allocation data frame.
