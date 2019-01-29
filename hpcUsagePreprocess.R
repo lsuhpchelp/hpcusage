@@ -61,7 +61,7 @@ if (prefix == "hpc_") {
 # Other: lsmsa,other
 alloc_w_org$system <- mapvalues(alloc_w_org$org,
         from = c("lsus","lsu","lsuhsc","marybird","pbrc","subr","tulane","xula","uno","latech","ulm","ull","selu","gram","mcneese","nsula","lsmsa","other"),
-        to = c(rep("lsu",5), "su", rep("laciu",2), rep("ull",8), rep("other",2)), warn_missing = TRUE
+        to = c(rep("lsu",5), "su", rep("laciu",2), rep("ull",8), rep("other",2))
 )
 
 # Get the region for each allocation.
@@ -72,7 +72,7 @@ alloc_w_org$system <- mapvalues(alloc_w_org$org,
 
 alloc_w_org$region <- mapvalues(alloc_w_org$org,
         from = c("latech", "lsus", "ulm", "nsula", "lsuhsc", "gram", "lsmsa", "tulane", "xula", "subr", "uno", "lsu", "ull", "selu", "marybird", "mcneese", "pbrc", "other"),
-        to = c(rep("north",7),rep("south",10),"other"), warn_missing = TRUE
+        to = c(rep("north",7),rep("south",10),"other")
 )
 
 # Assgin a discipline to each allocation.
@@ -94,8 +94,9 @@ alloc_w_org$research_area <- with(mapping,area[match(alloc_w_org$area,key)])
 # Trim the allocation data frame.
 
 alloc_lean <- subset(alloc_w_org,select=c("project","org","email","system","region","research_area"))
+alloc_lean <- alloc_lean[! duplicated(alloc_lean),]
 
 # Merge the jobs and allocation data frames.
 
 jlog_w_org <- merge(jlog,alloc_lean,by="project",all.x=T)
-
+jlog_w_org <- jlog_w_org[! duplicated(jlog_w_org),]
