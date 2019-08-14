@@ -153,9 +153,11 @@ if (alloc_w_org$deposited[i] <= 50000) {
 
 
 # Trim the allocation data frame.
+# Le Yan (8/14/2019): preserver the pi information from the alloc data frame so later each job will have a pi as well.
 
-alloc_lean <- subset(alloc_w_org,select=c("project","org","email","system","region","research_area"))
+alloc_lean <- subset(alloc_w_org,select=c("user","name","project","org","email","system","region","research_area"))
 alloc_lean <- alloc_lean[! duplicated(alloc_lean),]
+names(alloc_lean)[1] <- "pi"
 
 # Merge the jobs and allocation data frames.
 
