@@ -1,14 +1,22 @@
+# The configuration file hpcUsage.conf should look like:
+# hpc_password => xxxxxxxx
+# loni_password => xxxxxxxxx
+
+pwtext <- readLines("hpcUsage.conf")
+pwtext <- gsub("[[:space:]]","",pwtext)
+password <- gsub(paste0(prefix,"password=>"),"",pwtext[grepl(prefix,pwtext)])
+
 # Connect to gold database
 if (prefix == "loni_") {
   # For LONI
   library(RMySQL)
   drv = dbDriver("MySQL")
-  myconn = dbConnect(drv, user="gold", dbname="gold", host="gold04.hpc.lsu.edu", password="<you need to insert this>")
+  myconn = dbConnect(drv, user="gold", dbname="gold", host="gold04.hpc.lsu.edu", password)
 } else if (prefix == "hpc_") {
   # For HPC
   library(RPostgreSQL)
   drv = dbDriver("PostgreSQL")
-  myconn = dbConnect(drv, user="gold", dbname="gold", host="postgres.cct.lsu.edu", password="<you need to insert this>")
+  myconn = dbConnect(drv, user="gold", dbname="gold", host="postgres.cct.lsu.edu", password)
 } else {
   stop("Error: the prefix has to be hpc or loni!")
 }
